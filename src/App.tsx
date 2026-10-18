@@ -55,11 +55,12 @@ function App() {
   const [category, setCategory] = useState<Category>('Groceries')
   const [submitting, setSubmitting] = useState(false)
 
-  // Search and Filter
+  // Search and Filter states
   const [searchQuery, setSearchQuery] = useState('')
   const [typeFilter, setTypeFilter] = useState<'all' | 'income' | 'expense'>('all')
   const [categoryFilter, setCategoryFilter] = useState<string>('all')
 
+  // Auth listener
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }: { data: { session: Session | null } }) => {
       setUser(session?.user ?? null)
@@ -75,6 +76,7 @@ function App() {
     return () => subscription.unsubscribe()
   }, [])
 
+  // Fetch transactions for logged-in user
   useEffect(() => {
     if (!user) {
       setTransactions([])
@@ -343,13 +345,24 @@ function App() {
                 </p>
               </div>
 
-              <button
-                type="button"
-                className="topbar-button"
-                onClick={() => setActiveTab('add')}
-              >
-                <span>＋</span> New transaction
-              </button>
+              <div className="topbar-actions">
+                <button
+                  type="button"
+                  className="topbar-button"
+                  onClick={() => setActiveTab('add')}
+                >
+                  <span>＋</span> New transaction
+                </button>
+                <button
+                  type="button"
+                  className="secondary-button mobile-signout-btn"
+                  onClick={handleLogout}
+                  title="Sign out"
+                  aria-label="Sign out"
+                >
+                  <span>⎋</span> Sign out
+                </button>
+              </div>
             </header>
 
             <section className="balance-card">
@@ -483,6 +496,15 @@ function App() {
                 >
                   <span>＋</span> Add new
                 </button>
+                <button
+                  type="button"
+                  className="secondary-button mobile-signout-btn"
+                  onClick={handleLogout}
+                  title="Sign out"
+                  aria-label="Sign out"
+                >
+                  <span>⎋</span> Sign out
+                </button>
               </div>
             </header>
 
@@ -572,6 +594,18 @@ function App() {
                 <p className="page-subtitle">
                   Record new incoming income or outgoing expenses.
                 </p>
+              </div>
+
+              <div className="topbar-actions">
+                <button
+                  type="button"
+                  className="secondary-button mobile-signout-btn"
+                  onClick={handleLogout}
+                  title="Sign out"
+                  aria-label="Sign out"
+                >
+                  <span>⎋</span> Sign out
+                </button>
               </div>
             </header>
 

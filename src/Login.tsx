@@ -39,8 +39,12 @@ export default function Login() {
 
         if (error) throw error
       }
-    } catch (err: any) {
-      setErrorMessage(err.message || 'An error occurred during authentication.')
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setErrorMessage(err.message)
+      } else {
+        setErrorMessage('An unexpected error occurred.')
+      }
     } finally {
       setLoading(false)
     }
